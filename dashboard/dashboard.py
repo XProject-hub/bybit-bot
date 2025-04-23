@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import io, base64, os
 from datetime import datetime
 
+
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
@@ -36,7 +37,11 @@ def dashboard():
         buf.seek(0)
         chart = base64.b64encode(buf.read()).decode("utf-8")
         plt.close()
-    return render_template("dashboard.html", total_profit=round(total_profit, 2), chart=chart)
+    return render_template("dashboard.html",
+                       total_profit=round(total_profit, 2),
+                       chart=chart,
+                       year=datetime.now().year)
+
 
 @app.route("/logout")
 def logout():
