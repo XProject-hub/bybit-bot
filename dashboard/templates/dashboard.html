@@ -7,12 +7,36 @@
 <body>
 <div class="dashboard-container">
     <h1>📊 Dashboard <a href="/logout" style="float:right;">Logout</a></h1>
-    <h2>💰 Total Profit: <span class="profit">${{ total_profit }}</span></h2>
-    {% if chart %}
-        <img src="data:image/png;base64,{{ chart }}" class="chart-img">
+    <h2>📋 Trade Log</h2>
+    {% if trades %}
+    <table>
+        <tr>
+            <th>Time</th>
+            <th>Symbol</th>
+            <th>Side</th>
+            <th>Entry</th>
+            <th>Exit</th>
+            <th>Amount</th>
+            <th>Profit</th>
+            <th>Reason</th>
+        </tr>
+        {% for row in trades %}
+        <tr>
+            <td>{{ row.Time }}</td>
+            <td>{{ row.Symbol }}</td>
+            <td>{{ row.Side }}</td>
+            <td>{{ row.Entry }}</td>
+            <td>{{ row.Exit }}</td>
+            <td>{{ row.Amount }}</td>
+            <td>{{ row.Profit }}</td>
+            <td>{{ row.Reason }}</td>
+        </tr>
+        {% endfor %}
+    </table>
     {% else %}
-        <p>No profit data yet.</p>
+    <p>No trade data available yet.</p>
     {% endif %}
+    
     <footer>© {{ year }} @ Developed by X Project | Version 1.0.1</footer>
 </div>
 </body>

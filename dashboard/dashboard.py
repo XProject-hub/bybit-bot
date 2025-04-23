@@ -22,13 +22,18 @@ def login():
 def dashboard():
     if not session.get("logged_in"):
         return redirect("/")
+
     chart = None
     total_profit = 0
+    trades = []
+
     if os.path.exists("data/profits.csv"):
-        df = pd.read_csv("data/profits.csv", names=["Time","Symbol","Side","Entry","Exit","Amount","Profit","Reason"])
+        df = pd.read_csv("data/profits.csv", names=["Time","Symbol","Side","Entry","Exit","Amount","Profit","Status","Reason"])
         df["Time"] = pd.to_datetime(df["Time"])
         total_profit = df["Profit"].sum()
         df["Date"] = df["Time"].dt.date
+
+        # Chart: daily profit
         profit_per_day = df.groupby("Date")["Profit"].sum()
         fig, ax = plt.subplots()
         profit_per_day.plot(kind="bar", ax=ax)
@@ -37,10 +42,16 @@ def dashboard():
         buf.seek(0)
         chart = base64.b64encode(buf.read()).decode("utf-8")
         plt.close()
+
+        # Get latest 10 trades with reasoning
+        trades = df.sort_values("Time", ascending=False).head(10).to_dict(orient="records")
+
     return render_template("dashboard.html",
-                       total_profit=round(total_profit, 2),
-                       chart=chart,
-                       year=datetime.now().year)
+        total_profit=round(total_profit, 2),
+        chart=chart,
+        trades=trades,
+        year=datetime.now().year
+    )
 
 
 @app.route("/logout")
