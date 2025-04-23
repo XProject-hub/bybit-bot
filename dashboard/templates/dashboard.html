@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="dashboard-container">
+    <h1>📊 Dashboard <a href="/logout" style="float:right;">Logout</a></h1>
+    <h2>💰 Total Profit: <span class="profit">${{ total_profit }}</span></h2>
+    {% if chart %}
+        <img src="data:image/png;base64,{{ chart }}" class="chart-img">
+    {% else %}
+        <p>No profit data yet.</p>
+    {% endif %}
+    <footer>© X Project</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+ccxt
+xgboost
+pandas
+matplotlib
+flask
+python-dotenv

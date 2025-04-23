@@ -1,0 +1,39 @@
+body {
+    background: #121212;
+    color: #f2f2f2;
+    font-family: Arial;
+    padding: 30px;
+}
+.dashboard-container, .login-container {
+    background: #1e1e2f;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: auto;
+}
+input, button {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+}
+button {
+    background: #3ff073;
+    color: black;
+    font-weight: bold;
+}
+.profit {
+    color: #4be7c5;
+    font-size: 1.5em;
+}
+.chart-img {
+    width: 100%;
+    margin-top: 15px;
+}
+footer {
+    margin-top: 20px;
+    color: #888;
+    font-size: 0.9em;
+    text-align: center;
+}
