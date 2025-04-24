@@ -3,17 +3,19 @@ from telegram import send_telegram
 from profit_logger import log_trade
 from trading_features import get_balance, place_market_order
 from ai_model import predict
-from gpt_brain import gpt_decide, gpt_reason
+from gpt_brain import gpt_reason
+from position_manager import add_position
+from rl_agent import RLAgent
+
+rl = RLAgent()
 
 def execute_ai_trade(exchange, symbol, features):
     try:
         rsi, ema, macd, bb_width = features
-        ai_signal = predict(features)
-        ai_action = "BUY" if ai_signal == 1 else "HOLD"
-        gpt_action = gpt_decide(symbol, rsi, ema, macd, bb_width, ai_action)
+        action = rl.choose_action(rsi, macd, bb_width)
 
-        if ai_action != "BUY" or gpt_action != "BUY":
-            send_telegram(f"🤖 Skipped {symbol}: AI={ai_action}, GPT={gpt_action}")
+        if action != "BUY":
+            send_telegram(f"🤖 RL skipped {symbol}: Action={action}")
             return
 
         balance = get_balance(exchange, "USDT")
@@ -28,10 +30,15 @@ def execute_ai_trade(exchange, symbol, features):
         exchange.set_leverage(LEVERAGE, symbol)
         place_market_order(exchange, symbol, "buy", amount, LEVERAGE)
 
-        reason = gpt_reason(symbol, rsi, ema, macd, bb_width, ai_action)
-        send_telegram(f"✅ TRADE {symbol} LONG @ {price:.2f} | {amount} units\n🧠 {reason}")
+        reason = gpt_reason(symbol, rsi, ema, macd, bb_width, "BUY")
+        send_telegram(f"✅ RL TRADE {symbol} LONG @ {price:.2f} | {amount} units\n🧠 {reason}")
         profit = (price * LEVERAGE * TP_PERCENT / 100) * amount
+
+        # Log and update RL reward
         log_trade(symbol, "long", price, price * 1.02, amount, profit, "executed", reason)
+        rl.update(rsi, macd, bb_width, action, reward=profit)
+
+        add_position(symbol, "long", price, amount, portion)
 
     except Exception as e:
-        send_telegram(f"❌ AI Executor error: {str(e)}")
+        send_telegram(f"❌ RL Executor error: {str(e)}")

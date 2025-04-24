@@ -7,6 +7,76 @@
 <body>
 <div class="dashboard-container">
     <h1>📊 Dashboard <a href="/logout" style="float:right;">Logout</a></h1>
+
+    <h2>💰 Total Profit: <span class="profit">${{ total_profit }}</span></h2>
+    <h2>🧠 GPT Summary</h2>
+    <div class="gpt-summary-box">
+        <p>{{ gpt_summary }}</p>
+    </div>
+    
+    <h2>📈 Daily Profit Chart</h2>
+    {% if chart %}
+        <img src="data:image/png;base64,{{ chart }}" class="chart-img">
+    {% else %}
+        <p>No chart data available.</p>
+    {% endif %}
+
+    <h2>📊 Top Profitable Symbols</h2>
+    {% if symbol_chart %}
+        <img src="data:image/png;base64,{{ symbol_chart }}" class="chart-img">
+    {% else %}
+        <p>No symbol profit data available.</p>
+    {% endif %}
+
+    <h2>🔥 Most Traded Symbols</h2>
+    {% if most_traded %}
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <th>Number of Trades</th>
+        </tr>
+        {% for row in most_traded %}
+        <tr>
+            <td>{{ row.Symbol }}</td>
+            <td>{{ row.Trades }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No trade data available yet.</p>
+    {% endif %}
+
+    <h2>📌 Open Positions (with SL / TP)</h2>
+{% if open_positions %}
+<table>
+    <tr>
+        <th>Symbol</th>
+        <th>Entry</th>
+        <th>Qty</th>
+        <th>TP</th>
+        <th>Trailing SL</th>
+        <th>Current</th>
+        <th>Chart</th>
+        <th>Opened</th>
+    </tr>
+    {% for pos in open_positions %}
+    <tr class="{% if pos.alert == 'sl' %}sl-alert{% elif pos.alert == 'tp' %}tp-alert{% endif %}">
+        <td>{{ pos.get('symbol', '-') }}</td>
+        <td>{{ pos.entry }}</td>
+        <td>{{ pos.qty }}</td>
+        <td>{{ pos.tp }}</td>
+        <td>{{ pos.trailing }}</td>
+        <td>{{ pos.current }}</td>
+        <td><img src="{{ pos.sparkline }}" height="24" alt="chart"></td>
+        <td>{{ pos.timestamp | datetimeformat }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+    {% else %}
+    <p>🤖 No open positions at the moment.</p>
+    {% endif %}
+
     <h2>📋 Trade Log</h2>
     {% if trades %}
     <table>
@@ -36,8 +106,8 @@
     {% else %}
     <p>No trade data available yet.</p>
     {% endif %}
-    
-    <footer>© {{ year }} @ Developed by X Project | Version 1.0.1</footer>
+
+    <footer>© {{ year }} @ Developed by X Project | Version 1.0.2</footer>
 </div>
 </body>
 </html>
