@@ -4,8 +4,12 @@ import matplotlib.pyplot as plt
 import io, base64, os, json
 from datetime import datetime
 import ccxt  # NEW
-from utils.sparkline import get_sparkline
+from ..utils.sparkline import get_sparkline
 from utils.gpt_summary import generate_trade_summary
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 
 app = Flask(__name__)
