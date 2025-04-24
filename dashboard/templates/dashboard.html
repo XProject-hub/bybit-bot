@@ -5,109 +5,108 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="dashboard-container">
-    <h1>📊 Dashboard <a href="/logout" style="float:right;">Logout</a></h1>
-
-    <h2>💰 Total Profit: <span class="profit">${{ total_profit }}</span></h2>
-    <h2>🧠 GPT Summary</h2>
-    <div class="gpt-summary-box">
-        <p>{{ gpt_summary }}</p>
+    <div class="header">
+        <h1>📊 Dashboard</h1>
+        <form method="post" action="/logout"><button class="logout-btn">Logout</button></form>
     </div>
-    
-    <h2>📈 Daily Profit Chart</h2>
-    {% if chart %}
-        <img src="data:image/png;base64,{{ chart }}" class="chart-img">
-    {% else %}
-        <p>No chart data available.</p>
-    {% endif %}
 
-    <h2>📊 Top Profitable Symbols</h2>
-    {% if symbol_chart %}
-        <img src="data:image/png;base64,{{ symbol_chart }}" class="chart-img">
-    {% else %}
-        <p>No symbol profit data available.</p>
-    {% endif %}
+    <div class="content">
+        <div class="summary-box">
+            <h2>💶 Total Profit: <span class="profit">€{{ total_profit }}</span></h2>
+        </div>
 
-    <h2>🔥 Most Traded Symbols</h2>
-    {% if most_traded %}
-    <table>
-        <tr>
-            <th>Symbol</th>
-            <th>Number of Trades</th>
-        </tr>
-        {% for row in most_traded %}
-        <tr>
-            <td>{{ row.Symbol }}</td>
-            <td>{{ row.Trades }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-    <p>No trade data available yet.</p>
-    {% endif %}
+        <div class="gpt-box">
+            <h2>🧠 GPT Summary</h2>
+            <div class="gpt-summary">
+                <p>{{ gpt_summary }}</p>
+            </div>
+        </div>
 
-    <h2>📌 Open Positions (with SL / TP)</h2>
-{% if open_positions %}
-<table>
-    <tr>
-        <th>Symbol</th>
-        <th>Entry</th>
-        <th>Qty</th>
-        <th>TP</th>
-        <th>Trailing SL</th>
-        <th>Current</th>
-        <th>Chart</th>
-        <th>Opened</th>
-    </tr>
-    {% for pos in open_positions %}
-    <tr class="{% if pos.alert == 'sl' %}sl-alert{% elif pos.alert == 'tp' %}tp-alert{% endif %}">
-        <td>{{ pos.get('symbol', '-') }}</td>
-        <td>{{ pos.entry }}</td>
-        <td>{{ pos.qty }}</td>
-        <td>{{ pos.tp }}</td>
-        <td>{{ pos.trailing }}</td>
-        <td>{{ pos.current }}</td>
-        <td><img src="{{ pos.sparkline }}" height="24" alt="chart"></td>
-        <td>{{ pos.timestamp | datetimeformat }}</td>
-    </tr>
-    {% endfor %}
-</table>
+        <div class="charts-grid">
+            <div class="chart-section">
+                <h2>📈 Daily Profit Chart</h2>
+                {% if chart %}
+                    <img src="data:image/png;base64,{{ chart }}" class="chart-img">
+                {% else %}
+                    <div class="placeholder">No chart data available.</div>
+                {% endif %}
+            </div>
 
-    {% else %}
-    <p>🤖 No open positions at the moment.</p>
-    {% endif %}
+            <div class="chart-section">
+                <h2>📊 Top Profitable Symbols</h2>
+                {% if symbol_chart %}
+                    <img src="data:image/png;base64,{{ symbol_chart }}" class="chart-img">
+                {% else %}
+                    <div class="placeholder">No symbol profit data available.</div>
+                {% endif %}
+            </div>
+        </div>
 
-    <h2>📋 Trade Log</h2>
-    {% if trades %}
-    <table>
-        <tr>
-            <th>Time</th>
-            <th>Symbol</th>
-            <th>Side</th>
-            <th>Entry</th>
-            <th>Exit</th>
-            <th>Amount</th>
-            <th>Profit</th>
-            <th>Reason</th>
-        </tr>
-        {% for row in trades %}
-        <tr>
-            <td>{{ row.Time }}</td>
-            <td>{{ row.Symbol }}</td>
-            <td>{{ row.Side }}</td>
-            <td>{{ row.Entry }}</td>
-            <td>{{ row.Exit }}</td>
-            <td>{{ row.Amount }}</td>
-            <td>{{ row.Profit }}</td>
-            <td>{{ row.Reason }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-    <p>No trade data available yet.</p>
-    {% endif %}
+        <div class="section">
+            <h2>🔥 Most Traded Symbols</h2>
+            {% if most_traded %}
+            <table>
+                <tr><th>Symbol</th><th>Number of Trades</th></tr>
+                {% for row in most_traded %}
+                <tr><td>{{ row.Symbol }}</td><td>{{ row.Trades }}</td></tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <div class="placeholder">No trade data available yet.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>📌 Open Positions (with SL / TP)</h2>
+            {% if open_positions %}
+            <table>
+                <tr>
+                    <th>Symbol</th><th>Entry</th><th>Qty</th><th>TP</th><th>Trailing SL</th><th>Current</th><th>Chart</th><th>Opened</th>
+                </tr>
+                {% for pos in open_positions %}
+                <tr class="{% if pos.alert == 'sl' %}sl-alert{% elif pos.alert == 'tp' %}tp-alert{% endif %}">
+                    <td>{{ pos.get('symbol', '-') }}</td>
+                    <td>{{ pos.entry }}</td>
+                    <td>{{ pos.qty }}</td>
+                    <td>€{{ pos.tp }}</td>
+                    <td>€{{ pos.trailing }}</td>
+                    <td>€{{ pos.current }}</td>
+                    <td><img src="{{ pos.sparkline }}" height="28"></td>
+                    <td>{{ pos.timestamp | datetimeformat }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <div class="placeholder">🤖 No open positions at the moment.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>📋 Trade Log</h2>
+            {% if trades %}
+            <table>
+                <tr>
+                    <th>Time</th><th>Symbol</th><th>Side</th><th>Entry</th><th>Exit</th><th>Amount</th><th>Profit</th><th>Reason</th>
+                </tr>
+                {% for row in trades %}
+                <tr>
+                    <td>{{ row.Time }}</td>
+                    <td>{{ row.Symbol }}</td>
+                    <td>{{ row.Side }}</td>
+                    <td>€{{ row.Entry }}</td>
+                    <td>€{{ row.Exit }}</td>
+                    <td>{{ row.Amount }}</td>
+                    <td>€{{ row.Profit }}</td>
+                    <td>{{ row.Reason }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <div class="placeholder">No trade data available yet.</div>
+            {% endif %}
+        </div>
+    </div>
 
     <footer>© {{ year }} @ Developed by X Project | Version 1.0.2</footer>
-</div>
 </body>
 </html>

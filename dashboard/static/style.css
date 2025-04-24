@@ -1,55 +1,113 @@
 body {
-    background: #121212;
+    margin: 0;
+    padding: 0;
+    background: #0f0f13;
     color: #f2f2f2;
-    font-family: Arial;
-    padding: 30px;
+    font-family: 'Segoe UI', sans-serif;
 }
-.dashboard-container, .login-container {
-    background: #1e1e2f;
-    padding: 30px;
-    border-radius: 10px;
-    max-width: 600px;
-    margin: auto;
+
+.header {
+    background: #1c1c2c;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-input, button {
-    display: block;
-    width: 90%;
-    margin: 10px auto;
-    padding: 10px;
-    border-radius: 5px;
-}
-button {
+
+.logout-btn {
     background: #3ff073;
-    color: black;
+    border: none;
+    padding: 10px 18px;
     font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
 }
+
+.logout-btn:hover {
+    background: #32ffb6;
+}
+
+.content {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.summary-box, .section, .gpt-box {
+    margin-bottom: 40px;
+}
+
 .profit {
-    color: #4be7c5;
-    font-size: 1.5em;
+    font-size: 2rem;
+    color: #00e676;
 }
+
+.gpt-summary {
+    background: #222338;
+    border-left: 5px solid #3ff073;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #e0e0e0;
+}
+
 .chart-img {
-    width: 100%;
-    margin-top: 15px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    margin-top: 10px;
 }
-footer {
-    margin-top: 20px;
-    color: #888;
-    font-size: 0.9em;
+
+.charts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.chart-section {
+    flex: 1;
+    min-width: 460px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #333;
+}
+
+th, td {
+    padding: 12px;
     text-align: center;
 }
+
 .sl-alert {
-    background-color: rgba(255, 0, 0, 0.15);
+    background: rgba(255, 0, 0, 0.2);
 }
+
 .tp-alert {
-    background-color: rgba(255, 255, 0, 0.15);
+    background: rgba(255, 255, 0, 0.2);
 }
-.gpt-summary-box {
-    background-color: #1c1c2e;
-    color: #f1f1f1;
-    padding: 15px;
-    margin: 20px 0;
-    border-left: 6px solid #3ff073;
-    border-radius: 8px;
-    font-size: 0.95em;
-    text-align: left;
+
+.placeholder {
+    background: #1c1c2c;
+    padding: 20px;
+    border-radius: 10px;
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    margin-top: 10px;
+}
+
+footer {
+    margin: 40px auto;
+    text-align: center;
+    color: #777;
+    font-size: 0.9rem;
 }
